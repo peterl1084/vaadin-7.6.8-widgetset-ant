@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See commented blocks below for -->
+<!-- some examples of how to customize the build. -->
+<!-- (If you delete it and reopen the project it will be recreated.) -->
+<!-- By default, only the Clean and Build commands use this build script. -->
+<!-- Commands such as Run, Debug, and Test only use this build script if -->
+<!-- the Compile on Save feature is turned off for the project. -->
+<!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
+<!-- in the project's Project Properties dialog box.-->
+<project name="VaadinWithLegacyProject"  basedir=".">
+	<description>Builds, tests, and runs the project VaadinWithLegacyProject.</description>
+
+	<!-- Define what is needed during GWT compilation -->
+	<path id="classpath.widgetset">
+		<!-- Actual GWT compiler etc -->
+		<fileset dir="lib/widgetset-compilation">
+			<include name="*.jar" />
+		</fileset>
+		<!-- Vaadin runtime, some shared class, some stuff could be omitted -->
+		<fileset dir="WebContent/WEB-INF/lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="compile-widgetset">
+		<java classname="com.google.gwt.dev.Compiler" failonerror="yes" fork="yes">
+			<arg value="-war" />
+			<arg value="build/web/VAADIN/widgetsets" />
+			<arg value="AppWidgetset" />
+			<arg value="-logLevel" />
+			<arg value="INFO" />
+			<arg value="-strict" />
+			<jvmarg value="-Xmx1024M" />
+			<jvmarg value="-Xss512M" />
+			<jvmarg value="-Djava.awt.headless=true" />
+			<classpath>
+				<!-- This contains AppWidgetset.gwt.xml, the GWT module to compile -->
+				<pathelement path="src/java" />
+				<!-- Some GWT stuff, like optimizations, may need classes as well -->
+				<pathelement path="build/web/WEB-INF/classes" />
+				<path refid="classpath.widgetset" />
+			</classpath>
+			<sysproperty key="vFailIfNotSerializable" value="false" />
+		</java>
+
+		<!-- cleanup -->
+
+		<!--        <delete dir="${workdir}/VAADIN/gwt-unitCache"/>
+        <delete dir="${workdir}/VAADIN/widgetsets/WEB-INF"/>-->
+
+	</target>
+
+</project>
